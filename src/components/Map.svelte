@@ -1,6 +1,7 @@
 <script>
   import { onMount, onDestroy } from "svelte";
   import mapbox from "mapbox-gl";
+  import "https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.0/mapbox-gl-directions.js";
   import "mapbox-gl/dist/mapbox-gl.css";
 
   const {
@@ -152,6 +153,16 @@
       map.addControl(new NavigationControl());
       map.addControl(new FullscreenControl());
       map.addControl(new GeolocateControl());
+      // Directions Control
+      map.addControl(
+        // @ts-ignore
+        new MapboxDirections({
+          accessToken: mapbox.accessToken,
+          unit: "metric",
+          profile: "mapbox/driving",
+        }),
+        "top-left"
+      );
       EVS.forEach((ev) => {
         const { lng, lat, name } = ev;
         new Marker({
@@ -161,31 +172,31 @@
           .setPopup(new Popup({ offset: 25 }).setHTML(`<h3>${name}</h3>`))
           .addTo(map);
       });
-      fetch(getDirectionURL(currentLocation, destination))
-        .then((res) => res.json())
-        .then((data) => {
-          routes = data.routes;
-          console.log(routes);
-          routes.forEach((route, i) => {
-            map.addSource(`route-${i}`, {
-              type: "geojson",
-              data: route.geometry,
-            });
-            map.addLayer({
-              id: `route-${i}`,
-              type: "line",
-              source: `route-${i}`,
-              layout: {
-                "line-join": "round",
-                "line-cap": "round",
-              },
-              paint: {
-                "line-color": i == 0 ? "#3887be" : "#3bb2d0",
-                "line-width": 8,
-              },
-            });
-          });
-        });
+      // fetch(getDirectionURL(currentLocation, destination))
+      //   .then((res) => res.json())
+      //   .then((data) => {
+      //     routes = data.routes;
+      //     console.log(routes);
+      //     routes.forEach((route, i) => {
+      //       map.addSource(`route-${i}`, {
+      //         type: "geojson",
+      //         data: route.geometry,
+      //       });
+      //       map.addLayer({
+      //         id: `route-${i}`,
+      //         type: "line",
+      //         source: `route-${i}`,
+      //         layout: {
+      //           "line-join": "round",
+      //           "line-cap": "round",
+      //         },
+      //         paint: {
+      //           "line-color": i == 0 ? "#3887be" : "#3bb2d0",
+      //           "line-width": 8,
+      //         },
+      //       });
+      //     });
+      //   });
     });
   });
 
@@ -197,6 +208,8 @@
 </div>
 
 <style>
+  /* Styles for the directions dialog box*/
+  @import "https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.0/mapbox-gl-directions.css";
   .map {
     position: absolute;
     inset: 0;
