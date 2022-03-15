@@ -280,7 +280,7 @@
             <p>Provider: ${ev.provider}</p>
             <p>Ports: ${ev.ports} ports</p>
             <p>Charging Type: ${ev.chargingType}</p>
-            <button class="btn123">${
+            <button class="popup-submitter">${
               userType == "U"
                 ? ev.name == "Canditate Point"
                   ? "Vote"
@@ -295,7 +295,7 @@
               p {
                 font-size: 1rem;
               }
-              .btn123 {
+              .popup-submitter {
                 background-color: #4CAF50;
                 color: white;
                 padding: 14px 20px;
