@@ -177,6 +177,30 @@
       ports: 2,
       chargingType: "Fast",
     },
+    {
+      lat: 11.0162618,
+      lng: 76.9699463,
+      name: "Canditate Point",
+      color: "#FFFF00",
+    },
+    {
+      lat: 11.017114,
+      lng: 76.953749,
+      name: "Canditate Point",
+      color: "#FFFF00",
+    },
+    {
+      lat: 11.055021,
+      lng: 76.994646,
+      name: "Canditate Point",
+      color: "#FFFF00",
+    },
+    {
+      lat: 11.013017,
+      lng: 76.985896,
+      name: "Canditate Point",
+      color: "#FFFF00",
+    },
   ];
 
   if (userType === "B") {
@@ -232,7 +256,8 @@
       map.addControl(new FullscreenControl());
       map.addControl(new GeolocateControl());
       // Directions Control
-      if (userType == "U") {
+      if (userType == "U" && false) {
+        //  This is dead code :(
         map.addControl(
           // @ts-ignore
           new MapboxDirections({
@@ -249,7 +274,39 @@
           color: !!color ? color : "#ff0000",
         })
           .setLngLat([lng, lat])
-          .setPopup(new Popup({ offset: 25 }).setHTML(`<h3>${name}</h3>`))
+          .setPopup(
+            new Popup({ offset: 25 }).setHTML(
+              `<h3>${name}</h3>
+            <p>Provider: ${ev.provider}</p>
+            <p>Ports: ${ev.ports} ports</p>
+            <p>Charging Type: ${ev.chargingType}</p>
+            <button class="btn123">${
+              userType == "U"
+                ? ev.name == "Canditate Point"
+                  ? "Vote"
+                  : "Register"
+                : "Land Details"
+            }</button>
+            <style>
+              h3 {
+                font-size: 1.15rem;
+                margin: 0;
+              }
+              p {
+                font-size: 1rem;
+              }
+              .btn123 {
+                background-color: #4CAF50;
+                color: white;
+                padding: 14px 20px;
+                margin: 8px 0;
+                border: none;
+                cursor: pointer;
+                width: 100%;
+              }
+            </style>`
+            )
+          )
           .addTo(map);
       });
       // fetch(getDirectionURL(currentLocation, destination))
@@ -295,5 +352,11 @@
     inset: 0;
     width: 100%;
     height: 100%;
+  }
+  :global(.mapboxgl-popup-content) {
+    padding: 2em;
+  }
+  :global(.mapboxgl-popup-close-button) {
+    font-size: 2em;
   }
 </style>
