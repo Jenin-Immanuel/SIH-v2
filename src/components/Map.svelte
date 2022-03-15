@@ -1,8 +1,10 @@
 <script>
   import { onMount, onDestroy } from "svelte";
+  import Sidebar from "./Sidebar.svelte";
   import mapbox from "mapbox-gl";
   import "https://api.mapbox.com/mapbox-gl-js/plugins/mapbox-gl-directions/v4.1.0/mapbox-gl-directions.js";
   import "mapbox-gl/dist/mapbox-gl.css";
+  import Legend from "./Legend.svelte";
 
   const {
     Map,
@@ -19,6 +21,12 @@
 
   let EVS;
   const userType = localStorage.getItem("userType");
+
+  let displaySidebar = false;
+
+  function toggleSidebar() {
+    displaySidebar = !displaySidebar;
+  }
 
   const EVS_B = [
     {
@@ -220,6 +228,8 @@
 
   let routes = [];
 
+  let selectedSpot = {};
+
   const getDirectionURL = (from, to) => {
     return `https://api.mapbox.com/directions/v5/mapbox/driving/${from.lng},${from.lat};${to.lng},${to.lat}?geometries=geojson&access_token=${mapbox.accessToken}`;
   };
@@ -256,7 +266,7 @@
       map.addControl(new FullscreenControl());
       map.addControl(new GeolocateControl());
       // Directions Control
-      if (userType == "U" && false) {
+      if (userType == "U") {
         //  This is dead code :(
         map.addControl(
           // @ts-ignore
@@ -270,13 +280,8 @@
       }
       EVS.forEach((ev) => {
         const { lng, lat, name, color } = ev;
-        new Marker({
-          color: !!color ? color : "#ff0000",
-        })
-          .setLngLat([lng, lat])
-          .setPopup(
-            new Popup({ offset: 25 }).setHTML(
-              `<h3>${name}</h3>
+        let popup = new Popup({ offset: 25 }).setHTML(
+          `<h3>${name}</h3>${name == "Candiate"}
             <p>Provider: ${ev.provider}</p>
             <p>Ports: ${ev.ports} ports</p>
             <p>Charging Type: ${ev.chargingType}</p>
@@ -285,7 +290,9 @@
                 ? ev.name == "Canditate Point"
                   ? "Vote"
                   : "Register"
-                : "Land Details"
+                : ev.name == "Canditate Point"
+                ? "Land Details"
+                : "Station Details"
             }</button>
             <style>
               h3 {
@@ -301,12 +308,29 @@
                 padding: 14px 20px;
                 margin: 8px 0;
                 border: none;
+                border-radius: 0.5em;
                 cursor: pointer;
                 width: 100%;
               }
             </style>`
-            )
-          )
+        );
+
+        popup.on("open", () => {
+          // @ts-ignore
+          document.getElementsByClassName("popup-submitter")[0].onclick =
+            toggleSidebar;
+          selectedSpot = ev;
+        });
+
+        popup.on("close", (_) => {
+          displaySidebar = false;
+        });
+
+        new Marker({
+          color: !!color ? color : "#ff0000",
+        })
+          .setLngLat([lng, lat])
+          .setPopup(popup)
           .addTo(map);
       });
       // fetch(getDirectionURL(currentLocation, destination))
@@ -342,6 +366,8 @@
 
 <div>
   <div class="map" id="map" />
+  <Sidebar bind:showSidebar={displaySidebar} bind:details={selectedSpot} />
+  <Legend />
 </div>
 
 <style>
@@ -358,5 +384,8 @@
   }
   :global(.mapboxgl-popup-close-button) {
     font-size: 2em;
+  }
+  :global(.mapboxgl-popup-content) {
+    border-radius: 1em;
   }
 </style>
