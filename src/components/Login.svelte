@@ -2,7 +2,6 @@
   import firebase from "firebase/compat/app";
   import * as firebaseui from "firebaseui";
   import "firebaseui/dist/firebaseui.css";
-  import { onMount } from "svelte";
   import { firebaseConfig } from "./config";
 
   firebase.initializeApp(firebaseConfig);
@@ -14,7 +13,7 @@
       firebase.auth.EmailAuthProvider.PROVIDER_ID,
       firebase.auth.GoogleAuthProvider.PROVIDER_ID,
     ],
-    signInSuccessUrl: "/",
+    signInSuccessUrl: "/login/success",
   });
 </script>
 

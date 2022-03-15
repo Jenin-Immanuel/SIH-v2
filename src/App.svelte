@@ -3,6 +3,7 @@
   import firebase from "firebase/compat/app";
   import Map from "./components/Map.svelte";
   import Login from "./components/Login.svelte";
+import AfterLogin from "./components/AfterLogin.svelte";
 
   let user = {};
 
@@ -24,6 +25,7 @@
   <Router>
     <Route path="/" component={Map} />
     <Route path="login" component={Login} />
+    <Route path="login/success" component={AfterLogin} />
   </Router>
 </main>
 

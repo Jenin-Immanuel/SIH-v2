@@ -17,8 +17,8 @@
   mapbox.accessToken =
     "pk.eyJ1Ijoid2VyZGQxMjMiLCJhIjoiY2wwbWFhdWg4MTQ4OTNkbWdvMWJtM2FwdSJ9.OzscmVsBnX7zlZVzc-AhkQ";
 
-  let EVS,
-    userType = "B";
+  let EVS;
+  const userType = localStorage.getItem("userType");
 
   const EVS_B = [
     {
