@@ -5,18 +5,17 @@
   import { onMount } from "svelte";
   import { firebaseConfig } from "./config";
 
-  try {
-    firebase.initializeApp(firebaseConfig);
-    let ui = new firebaseui.auth.AuthUI(firebase.auth());
-    ui.start("#firebaseui-auth-container", {
-      signInOptions: [
-        firebase.auth.EmailAuthProvider.PROVIDER_ID,
-        firebase.auth.GoogleAuthProvider.PROVIDER_ID,
-      ],
-    });
-  } catch (error) {
-    window.location.reload();
-  }
+  firebase.initializeApp(firebaseConfig);
+
+  let ui = new firebaseui.auth.AuthUI(firebase.auth());
+
+  ui.start("#firebaseui-auth-container", {
+    signInOptions: [
+      firebase.auth.EmailAuthProvider.PROVIDER_ID,
+      firebase.auth.GoogleAuthProvider.PROVIDER_ID,
+    ],
+    signInSuccessUrl: "/",
+  });
 </script>
 
 <div>

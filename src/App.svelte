@@ -11,8 +11,6 @@
       // User is signed in, see docs for a list of available properties
       // https://firebase.google.com/docs/reference/js/firebase.User
       user = _user;
-
-      console.log(user.displayName);
       // ...
     } else {
       // User is signed out
