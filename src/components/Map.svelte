@@ -17,7 +17,79 @@
   mapbox.accessToken =
     "pk.eyJ1Ijoid2VyZGQxMjMiLCJhIjoiY2wwbWFhdWg4MTQ4OTNkbWdvMWJtM2FwdSJ9.OzscmVsBnX7zlZVzc-AhkQ";
 
-  const EVS = [
+  let EVS,
+    userType = "B";
+
+  const EVS_B = [
+    {
+      lat: 11.00902,
+      lng: 76.95997,
+      name: "Brookfields Mall",
+      color: "#FF0000",
+    },
+    {
+      lat: 11.022849,
+      lng: 76.951635,
+      name: "SR Tranzcars, Saibaba Koil",
+      color: "#FF0000",
+    },
+    {
+      lat: 11.00269216,
+      lng: 77.0387079,
+      name: "IOCL Shanthi Social Services, Singanallur",
+      color: "#FF0000",
+    },
+    {
+      lat: 11.0706702,
+      lng: 76.9988664,
+      name: "DC",
+      color: "#FFA500",
+    },
+    {
+      lat: 11.031058,
+      lng: 77.038549,
+      name: "DC",
+      color: "#FFA500",
+    },
+    {
+      lat: 11.025281381418203,
+      lng: 77.01098024779436,
+      name: "DC",
+      color: "#FFA500",
+    },
+    {
+      lat: 10.999479851953545,
+      lng: 77.02488288641993,
+      name: "DC",
+      color: "#FFA500",
+    },
+    {
+      lat: 11.0162618,
+      lng: 76.9699463,
+      name: "Canditate Point",
+      color: "#FFFF00",
+    },
+    {
+      lat: 11.017114,
+      lng: 76.953749,
+      name: "Canditate Point",
+      color: "#FFFF00",
+    },
+    {
+      lat: 11.055021,
+      lng: 76.994646,
+      name: "Canditate Point",
+      color: "#FFFF00",
+    },
+    {
+      lat: 11.013017,
+      lng: 76.985896,
+      name: "Canditate Point",
+      color: "#FFFF00",
+    },
+  ];
+
+  const EVS_U = [
     {
       lat: 11.10618,
       lng: 77.35042,
@@ -107,6 +179,12 @@
     },
   ];
 
+  if (userType === "B") {
+    EVS = EVS_B;
+  } else {
+    EVS = EVS_U;
+  }
+
   let currentLocation = {
     lat: 11.0,
     lng: 77.0,
@@ -154,19 +232,21 @@
       map.addControl(new FullscreenControl());
       map.addControl(new GeolocateControl());
       // Directions Control
-      map.addControl(
-        // @ts-ignore
-        new MapboxDirections({
-          accessToken: mapbox.accessToken,
-          unit: "metric",
-          profile: "mapbox/driving",
-        }),
-        "top-left"
-      );
+      if (userType == "U") {
+        map.addControl(
+          // @ts-ignore
+          new MapboxDirections({
+            accessToken: mapbox.accessToken,
+            unit: "metric",
+            profile: "mapbox/driving",
+          }),
+          "top-left"
+        );
+      }
       EVS.forEach((ev) => {
-        const { lng, lat, name } = ev;
+        const { lng, lat, name, color } = ev;
         new Marker({
-          color: "#ff0000",
+          color: !!color ? color : "#ff0000",
         })
           .setLngLat([lng, lat])
           .setPopup(new Popup({ offset: 25 }).setHTML(`<h3>${name}</h3>`))
